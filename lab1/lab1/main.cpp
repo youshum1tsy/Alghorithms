@@ -1,9 +1,21 @@
 #include <iostream>
+#include <random>
 
 int main() {
-	int mass[10] = { 10, 15, 3, 8, 64, 124, 55, 20, 19, 13 };
+	int mass[10] = { 0 };
 	int max = INT_MIN;
 	int min = INT_MAX;
+
+	srand(time(NULL));
+
+	std::cout << "mass: ";
+
+	for (int i = 0; i < 10; i++) {
+		mass[i] = rand() % 150 - 75;
+		std::cout << mass[i] << " ";
+	}
+	std::cout << std::endl;
+
 	for (int number : mass) {
 		if (number < min) {
 			min = number;
