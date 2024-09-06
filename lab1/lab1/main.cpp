@@ -2,7 +2,13 @@
 #include <random>
 
 int main() {
-	int mass[10] = { 0 };
+	int size;
+
+	std::cout << "Enter size of array: ";
+	std::cin >> size;
+
+	int* array = (int*) malloc(size * sizeof(int));
+
 	int max = INT_MIN;
 	int min = INT_MAX;
 
@@ -10,19 +16,20 @@ int main() {
 
 	std::cout << "mass: ";
 
-	for (int i = 0; i < 10; i++) {
-		mass[i] = rand() % 150 - 75;
-		std::cout << mass[i] << " ";
+	for (int i = 0; i < size; i++) {
+		array[i] = rand() % 150 - 75;
+		std::cout << array[i] << " ";
 	}
 	std::cout << std::endl;
 
-	for (int number : mass) {
-		if (number < min) {
-			min = number;
+	for (int i = 0; i < size; i++) {
+		if (array[i] < min) {
+			min = array[i];
 		}
-		if (number > max) {
-			max = number;
+		if (array[i] > max) {
+			max = array[i];
 		}
 	}
+	free(array);
 	std::cout << "max: " << max << " min: " << min << std::endl;
 }
