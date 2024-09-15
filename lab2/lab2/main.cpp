@@ -54,136 +54,128 @@ int main(void) {
 	setvbuf(stdout, NULL, _IONBF, 0);
 
 	clock_t start, end;
-	int size = 1000000;
+	int size = 21;
 
-	int* a = (int*)malloc(sizeof(int) * size);
-	int* b = (int*)malloc(sizeof(int) * size);
-	int* c = (int*)malloc(sizeof(int) * size);
-	int* d = (int*)malloc(sizeof(int) * size);
+	int* a1 = (int*)malloc(sizeof(int) * size);
+	int* b1 = (int*)malloc(sizeof(int) * size);
+	int* c1 = (int*)malloc(sizeof(int) * size);
+	int* d1 = (int*)malloc(sizeof(int) * size);
 
+	int* a2 = (int*)malloc(sizeof(int) * size);
+	int* a3 = (int*)malloc(sizeof(int) * size);
+			 
+	int* b2 = (int*)malloc(sizeof(int) * size);
+	int* b3 = (int*)malloc(sizeof(int) * size);
 
+	int* c2 = (int*)malloc(sizeof(int) * size);
+	int* c3 = (int*)malloc(sizeof(int) * size);
+			  
+	int* d2 = (int*)malloc(sizeof(int) * size);
+	int* d3 = (int*)malloc(sizeof(int) * size);
+	
 	srand(time(NULL));
 	for (size_t i = 0; i < size; i++) {
-		a[i] = rand() % 100 + 1;
+		a1[i] = rand() % 100 + 1;
 	}
+	memcpy(a2, a1, sizeof(int) * size);
+	memcpy(a3, a1, sizeof(int) * size);
+
 	start = clock();
-	shell(a, size);
+	shell(a1, size);
 	end = clock();
 	std::cout << "1. shell sort: " <<(float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
-
-	srand(time(NULL));
-	for (size_t i = 0; i < size; i++) {
-		a[i] = rand() % 100 + 1;
-	}
+	free(a1);
 
 	start = clock();
-	qs(a, 0, size - 1);
+	qs(a2, 0, size - 1);
 	end = clock();
 	std::cout << "1. qs sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
-	
-	srand(time(NULL));
-	for (size_t i = 0; i < size; i++) {
-		a[i] = rand() % 100 + 1;
-	}
+	free(a2);
+
 	start = clock();
-	qsort(a, size, sizeof(int), compare);
+	qsort(a3, size, sizeof(int), compare);
 	end = clock();
 	std::cout << "1. qsort c++ sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
-
+	free(a3);
 
 
 	for (size_t i = 0; i < size; i++) {
-		b[i] = i * 2;
+		b1[i] = i * 2;
 	}
+	memcpy(b2, b1, sizeof(int) * size);
+	memcpy(b3, b1, sizeof(int) * size);
+
+
 	start = clock();
-	shell(b, size);
+	shell(b1, size);
 	end = clock();
 	std::cout << "2. shell sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
+	free(b1);
 
-	for (size_t i = 0; i < size; i++) {
-		b[i] = i * 2;
-	}
 	start = clock();
-	qs(b, 0, size - 1);
+	qs(b2, 0, size - 1);
 	end = clock();
 	std::cout << "2. qs sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
+	free(b2);
 
-	for (size_t i = 0; i < size; i++) {
-		b[i] = i * 2;
-	}
 	start = clock();
-	qsort(b, size, sizeof(int), compare);
+	qsort(b3, size, sizeof(int), compare);
 	end = clock();
 	std::cout << "2. qsort c++ sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
-
-
+	free(b3);
 
 	for (size_t i = 0; i < size; i++) {
-		c[i] = i * -2;
+		c1[i] = i * -2;
 	}
+	memcpy(c2, c1, sizeof(int) * size);
+	memcpy(c3, c1, sizeof(int) * size);
 
 	start = clock();
-	shell(b, size);
+	shell(c1, size);
 	end = clock();
 	std::cout << "3. shell sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
-
-	for (size_t i = 0; i < size; i++) {
-		c[i] = i * -2;
-	}
+	free(c1);
 
 	start = clock();
-	qs(b, 0, size - 1);
+	qs(c2, 0, size - 1);
 	end = clock();
 	std::cout << "3. qs sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
+	free(c2);
 
-	for (size_t i = 0; i < size; i++) {
-		c[i] = i * -2;
-	}
 	start = clock();
-	qsort(c, size, sizeof(int), compare);
+	qsort(c3, size, sizeof(int), compare);
 	end = clock();
 	std::cout << "3. qsort c++ sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
-
-
+	free(c3);
 
 	for (size_t i = 0; i < size; i++) {
 		if (i <= size / 2) {
-			d[i] = i * 2;
+			d1[i] = i * 2;
 		}
 		else {
-			d[i] = i / 2;
+			d1[i] = (size - 1 - i) * 2;
 		}
 	}
+	memcpy(d2, d1, sizeof(int) * size);
+	memcpy(d3, d1, sizeof(int) * size);
+
 	start = clock();
-	shell(d, size);
+	shell(d1, size);
 	end = clock();
 	std::cout << "4. shell sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
+	free(d1);
 
-	for (size_t i = 0; i < size; i++) {
-		if (i <= size / 2) {
-			d[i] = i * 2;
-		}
-		else {
-			d[i] = i / 2;
-		}
-	}
 	start = clock();
-	qs(d, 0, size - 1);
+	qs(d2, 0, size - 1);
 	end = clock();
 	std::cout << "4. qs sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
-	
-	for (size_t i = 0; i < size; i++) {
-		if (i <= size / 2) {
-			d[i] = i * 2;
-		}
-		else {
-			d[i] = i / 2;
-		}
-	}
+	free(d2);
+
 	start = clock();
-	qsort(d, size, sizeof(int), compare);
+	qsort(d3, size, sizeof(int), compare);
 	end = clock();
 	std::cout << "4. qsort c++ sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
+	free(d3);
 
 	return(0);
 }
