@@ -54,24 +54,12 @@ int main(void) {
 	setvbuf(stdout, NULL, _IONBF, 0);
 
 	clock_t start, end;
-	int size = 21;
+	int size = 1000000;
 
 	int* a1 = (int*)malloc(sizeof(int) * size);
-	int* b1 = (int*)malloc(sizeof(int) * size);
-	int* c1 = (int*)malloc(sizeof(int) * size);
-	int* d1 = (int*)malloc(sizeof(int) * size);
-
 	int* a2 = (int*)malloc(sizeof(int) * size);
 	int* a3 = (int*)malloc(sizeof(int) * size);
 			 
-	int* b2 = (int*)malloc(sizeof(int) * size);
-	int* b3 = (int*)malloc(sizeof(int) * size);
-
-	int* c2 = (int*)malloc(sizeof(int) * size);
-	int* c3 = (int*)malloc(sizeof(int) * size);
-			  
-	int* d2 = (int*)malloc(sizeof(int) * size);
-	int* d3 = (int*)malloc(sizeof(int) * size);
 	
 	srand(time(NULL));
 	for (size_t i = 0; i < size; i++) {
@@ -98,6 +86,9 @@ int main(void) {
 	std::cout << "1. qsort c++ sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
 	free(a3);
 
+	int* b1 = (int*)malloc(sizeof(int) * size);
+	int* b2 = (int*)malloc(sizeof(int) * size);
+	int* b3 = (int*)malloc(sizeof(int) * size);
 
 	for (size_t i = 0; i < size; i++) {
 		b1[i] = i * 2;
@@ -124,6 +115,11 @@ int main(void) {
 	std::cout << "2. qsort c++ sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
 	free(b3);
 
+
+	int* c1 = (int*)malloc(sizeof(int) * size);
+	int* c2 = (int*)malloc(sizeof(int) * size);
+	int* c3 = (int*)malloc(sizeof(int) * size);
+
 	for (size_t i = 0; i < size; i++) {
 		c1[i] = i * -2;
 	}
@@ -147,6 +143,10 @@ int main(void) {
 	end = clock();
 	std::cout << "3. qsort c++ sort: " << (float(end) - float(start)) / CLOCKS_PER_SEC << std::endl;
 	free(c3);
+
+	int* d1 = (int*)malloc(sizeof(int) * size);
+	int* d2 = (int*)malloc(sizeof(int) * size);
+	int* d3 = (int*)malloc(sizeof(int) * size);
 
 	for (size_t i = 0; i < size; i++) {
 		if (i <= size / 2) {
