@@ -3,7 +3,6 @@
 
 struct Node {
 	char info[256];
-	int priority;
 	struct Node* next = NULL;
 };
 
@@ -19,29 +18,13 @@ struct Node* get_struct(void) {
 	std::cout << "Enter information about object: ";
 	std::cin >> info;
 
-
-	while (priority <= 0) {
-		std::cout << "Enter priority(> 0) for object: ";
-		std::cin >> priority;
-	}
-
-
 	strcpy(p->info, info);
-	p->priority = priority;
 
 	p->next = NULL;
 	std::cout << "----\n";
 	return p;
 }
 
-struct Node* findPriority(struct Node* head, int priority) {
-	struct Node* prev = head;
-	while (priority > head->priority) {
-		prev = head;
-		head = head->next;
-	}
-	return prev;
-}
 
 void spstore(struct Node*& head, struct Node*& last) {
 	struct Node* p = NULL;
@@ -55,28 +38,16 @@ void spstore(struct Node*& head, struct Node*& last) {
 		head = p;
 		last = p;
 	}
-	else if (p->priority < head->priority) {
-		p->next = head;
-		head = p;
-	}
-	else if (p != NULL && p->priority >= last->priority) {
+	else {
 		last->next = p;
 		last = p;
 	}
-	else {
-		prev = findPriority(head, p->priority);
-		next = prev->next;
-
-		prev->next = p;
-		p->next = next;
-	}
-
 	return;
 }
 
 void review(struct Node* head) {
 	while (head) {
-		std::cout << "info: " << head->info << " priority: " << head->priority << "\n";
+		std::cout << "info: " << head->info << "\n";
 		head = head->next;
 	}
 	std::cout << "----\n";
@@ -97,7 +68,7 @@ void deleteFirstElement(struct Node*& head, struct Node*& last) {
 	}
 
 	temp->next = NULL;
-	std::cout << "Deleted this element\ninfo: " << temp->info << " priority: " << temp->priority << "\n";
+	std::cout << "Deleted this element\ninfo: " << temp->info << "\n";
 	std::cout << "----\n";
 	free(temp);
 }
