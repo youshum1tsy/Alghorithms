@@ -26,21 +26,17 @@ struct Node* get_struct(void) {
 }
 
 
-void spstore(struct Node*& head, struct Node*& last) {
+void push(struct Node*& head) {
 	struct Node* p = NULL;
-
-	struct Node* prev = NULL;
-	struct Node* next = NULL;
 
 	p = get_struct();
 
 	if (head == NULL && p != NULL) {
 		head = p;
-		last = p;
 	}
 	else {
-		last->next = p;
-		last = p;
+		p->next = head;
+		head = p;
 	}
 	return;
 }
@@ -54,7 +50,7 @@ void review(struct Node* head) {
 	return;
 }
 
-void deleteFirstElement(struct Node*& head, struct Node*& last) {
+void pop(struct Node*& head) {
 	if (head == NULL) {
 		std::cout << "List empty";
 		return;
@@ -63,12 +59,8 @@ void deleteFirstElement(struct Node*& head, struct Node*& last) {
 	struct Node* temp = head;
 	head = head->next;
 
-	if (head == NULL) {
-		last = NULL;
-	}
-
 	temp->next = NULL;
-	std::cout << "Deleted this element\ninfo: " << temp->info << "\n";
+	std::cout << "Deleted this element\ninfo: " << temp->info <<"\n";
 	std::cout << "----\n";
 	free(temp);
 }
@@ -76,14 +68,13 @@ void deleteFirstElement(struct Node*& head, struct Node*& last) {
 
 int main() {
 	struct Node* head = NULL;
-	struct Node* last = NULL;
 
-	spstore(head, last);
-	spstore(head, last);
-	spstore(head, last);
-	spstore(head, last);
+	push(head);
+	push(head);
+	push(head);
+	push(head);
 
 	review(head);
-	deleteFirstElement(head, last);
+	pop(head);
 	review(head);
 }
