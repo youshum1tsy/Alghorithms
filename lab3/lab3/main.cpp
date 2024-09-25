@@ -2,13 +2,13 @@
 #include <iostream>
 
 struct Node {
-	char info[256];
+	int info;
 	struct Node* next = NULL;
 };
 
 struct Node* get_struct(void) {
 	struct Node* p = NULL;
-	char info[256];
+	int info;
 	int priority = 0;
 
 	if ((p = (struct Node*)malloc(sizeof(struct Node))) == NULL) {
@@ -18,7 +18,7 @@ struct Node* get_struct(void) {
 	std::cout << "Enter information about object: ";
 	std::cin >> info;
 
-	strcpy(p->info, info);
+	p->info = info;
 
 	p->next = NULL;
 	std::cout << "----\n";
@@ -65,6 +65,33 @@ void pop(struct Node*& head) {
 	free(temp);
 }
 
+void deleteElement(struct Node*& head, int info) {
+	struct Node* temp = head;
+	struct Node* prev = NULL;
+	bool flag = 0;
+
+	while (temp && temp->info == info) {
+		head = temp->next;
+		free(temp);
+		temp = head;
+	}
+	
+	while (temp != NULL) {
+        while (temp != NULL && temp->info != info) {
+            prev = temp;
+            temp = temp->next;
+        }
+
+        if (temp == NULL) {
+            return;
+        }
+
+        prev->next = temp->next;
+        free(temp);
+        temp = prev->next;
+    }
+}
+
 
 int main() {
 	struct Node* head = NULL;
@@ -73,8 +100,10 @@ int main() {
 	push(head);
 	push(head);
 	push(head);
+	push(head);
 
 	review(head);
-	pop(head);
+	deleteElement(head, 2);
 	review(head);
+	
 }
