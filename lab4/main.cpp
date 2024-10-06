@@ -5,6 +5,7 @@ struct Node {
 	Node* left = nullptr;
 	int data = 0;
 };
+
 struct Node* CreateTree(struct Node* root, struct Node* r, int data)
 {
 	if (r == NULL)
@@ -32,11 +33,15 @@ struct Node* CreateTree(struct Node* root, struct Node* r, int data)
 	if (data > r->data) {
 		CreateTree(r, r->left, data);
 	}
+	else if (data == r->data) {
+		return root;
+	}
 	else {
 		CreateTree(r, r->right, data);
 	}
 	return root;
 }
+
 void print_tree(struct Node* r, int l)
 {
 	if (r == NULL)
@@ -52,6 +57,7 @@ void print_tree(struct Node* r, int l)
 	std::cout << r->data << "\n";
 	print_tree(r->left, l + 1);
 }
+
 struct Node* find_node(struct Node* root, int find_data) {
 	if (root == NULL) {
 		return nullptr;
@@ -125,7 +131,7 @@ int main()
 		print_tree(findNode, 0);
 	}
 	else {
-		std::cout << "element not found";
+		std::cout << "element not found\n";
 	}
 
 	separator();
