@@ -1,5 +1,7 @@
 #include <iostream>
-
+#include <set>
+//ограничить размер дерева на 20 node
+//найти сколько раз повторяются все элементы в дереве
 struct Node {
 	Node* right = nullptr;
 	Node* left = nullptr;
@@ -33,9 +35,9 @@ struct Node* CreateTree(struct Node* root, struct Node* r, int data)
 	if (data > r->data) {
 		CreateTree(r, r->left, data);
 	}
-	else if (data == r->data) {
+	/*else if (data == r->data) {
 		return root;
-	}
+	}*/
 	else {
 		CreateTree(r, r->right, data);
 	}
@@ -74,7 +76,7 @@ struct Node* find_node(struct Node* root, int find_data) {
 }
 
 int count_elements_in_tree(struct Node* root, int target) {
-	
+
 	if (root == NULL) {
 		return 0;
 	}
@@ -88,12 +90,26 @@ int count_elements_in_tree(struct Node* root, int target) {
 
 	count += count_elements_in_tree(root->right, target);
 	count += count_elements_in_tree(root->left, target);
-	
+
 	return count;
 }
 
 void separator() {
 	std::cout << "-----\n";
+}
+
+Node* count_all_elements_in_tree(Node* root, Node* head, std::set<int> &roots) {
+	if (root == NULL) {
+		return nullptr;
+	}
+	if (roots.count(root->data) == 0 ) {
+		std::cout << root->data << " count " << count_elements_in_tree(head, root->data) << "\n";
+		roots.insert(root->data);
+	}
+	
+	count_all_elements_in_tree(root->left, head, roots);
+	count_all_elements_in_tree(root->right, head, roots);	
+	
 }
 
 int main()
@@ -102,9 +118,11 @@ int main()
 	int D, start = 1;
 	int find = 0;
 	int target = 0;
+	int maxNode = 10;
+	int i = 0;
 	Node* root = NULL;
 	std::cout << "enter -1 to end of the tree construction\n";
-	while (start)
+	while (start && i != maxNode)
 	{
 		std::cout << "enter value of the tree element: ";
 		std::cin >> D;
@@ -115,6 +133,7 @@ int main()
 		}
 		else {
 			root = CreateTree(root, root, D);
+			i++;
 		}
 	}
 
@@ -139,6 +158,8 @@ int main()
 	std::cin >> target;
 	std::cout << "count: " << count_elements_in_tree(root, target) << "\n";
 	separator();
+	std::set<int> roots;
+	count_all_elements_in_tree(root, root, roots);
 
 	return 0;
 }
