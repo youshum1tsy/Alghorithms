@@ -1,119 +1,155 @@
 #include <iostream>
 #include <vector>
 
-int** createMatrix (int** matrix, int vertex, int edges) {
-
-  matrix = (int**) malloc(sizeof(int*) * vertex);
-  for (int v = 0; v < vertex; v++) {
-    matrix[v] = (int*) calloc(edges, sizeof(int));
-  }
-
-  srand(time(NULL));
-  for (int e = 0; e < edges; e++) {
-    
-    int v1 = rand() % vertex;
-    int v2 = rand() % vertex;
-    
-    while (v2 == v1) {
-      v2 = rand() % vertex;
+int** createMatrixS(int vertex) {
+    int** matrix = (int**)malloc(sizeof(int*) * vertex);
+    for (int i = 0; i < vertex; i++) {
+        matrix[i] = (int*)calloc(vertex ,sizeof(int));
     }
 
-    matrix[v1][e] = 1;
-    matrix[v2][e] = 1;
-  }
-
-
-  return matrix;
-}
-
-void printMatrix(int** matrix, int vertex, int edges) {
-
-  for (int v = 0; v < vertex; v++) {
-    for (int e = 0; e < edges; e++) {
-      std::cout << matrix[v][e] << " ";
+    srand(time(NULL));
+    for (int i = 0; i < vertex; i++) {
+        for (int j = i + 1; j < vertex; j++) {
+            if (i == j) {
+                matrix[i][j] = 0;
+            }
+            else {
+                matrix[i][j] = rand() % 2;
+                matrix[j][i] = matrix[i][j];
+            }
+        }
     }
-    std::cout << "\n";
-  }
-  
+
+    return matrix;
 }
 
-int sizeMatrix(int** matrix, int vertex, int edges) {
+int** createMatrixI(int** matrixS, int vertex, int edges) {
 
-  int count = 0;
-  for (int v = 0; v < vertex; v++) {
-    for (int e = 0; e < edges; e++) {
-      if (matrix[v][e] == 1) {
-        count++;
-      }
+    int** matrixI = (int**)malloc(vertex * sizeof(int*));
+    for (int v = 0; v < vertex; v++) {
+        matrixI[v] = (int*)calloc(edges, sizeof(int));
     }
-  }
-  return count / 2;
+
+    int currentEdge = 0;
+    for (int i = 0; i < vertex; i++) {
+        for (int j = i + 1; j < vertex; j++) {
+            if (matrixS[i][j] == 1) {
+                matrixI[i][currentEdge] = 1;
+                matrixI[j][currentEdge]= 1;
+                currentEdge++;
+            }
+        }
+    }
+    return matrixI;
 }
 
-void whichVertexType(int** matrix, int vertex, int edges) {
-  for (int v = 0; v < vertex; v++) {
+void printMatrixS(int** matrix, int vertex) {
+
+    for (int v = 0; v < vertex; v++) {
+        for (int e = 0; e < vertex; e++) {
+            std::cout << matrix[v][e] << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+void printMatrixI(int** matrix, int vertex, int edges) {
+
+    for (int v = 0; v < vertex; v++) {
+        for (int e = 0; e < edges; e++) {
+            std::cout << matrix[v][e] << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+int sizeMatrixS(int** matrix, int vertex) {
+
     int count = 0;
-    std::vector<int> massEdgesIndex;
-    for (int e = 0; e < edges; e++) {
-      if (matrix[v][e] == 1) {
-        count++;
-        massEdgesIndex.push_back(e);
-      }
-    }
-    if (count == 0) {
-      std::cout << "Vertex " << v+1 << " isolated" << std::endl;
-    }
-    else if (count == 1) {
-      std::cout << "Vertex " << v+1 << " end" << std::endl;
-    }
-    else if (count == vertex - 1) {
-      bool isDominant = true;
-      for (int currentV = 0; currentV < vertex; currentV++) {
-        if (currentV == v) {
-          continue;
+    for (int i = 0; i < vertex; i++) {
+        for (int j = 0; j < vertex; j++) {
+            if (matrix[i][j] == 1) {
+                count++;
+            }
         }
+    }
+    return count;
+}
 
-        bool connected = false;
-        for (int eIndex : massEdgesIndex) {
-          if (matrix[currentV][eIndex] == 1) {
-            connected = true;
-            break;
-          }
+int sizeMatrixI(int** matrix, int vertex, int edges) {
+
+    int count = 0;
+    for (int v = 0; v < vertex; v++) {
+        for (int e = 0; e < edges; e++) {
+            if (matrix[v][e] == 1) {
+                count++;
+            }
         }
-        if (!connected) {
-          isDominant = false;
-          break;
-        }
-      }
-      if (isDominant) {
-        std::cout << "Vertex " << v+1 << " dominant" << std::endl;
-      }
     }
-  }
+    return count / 2;
+}
+
+void whichVertexTypeS(int** matrix, int vertex) {
+    for (int i = 0; i < vertex; i++) {
+        int count = 0;
+        for (int j = 0; j < vertex; j++) {
+            if (matrix[i][j] == 1) {
+                count++;
+            }
+        }
+        if (count == 0) {
+            std::cout << "Vertex " << i + 1 << " isolated" << std::endl;
+        }
+        else if (count == 1) {
+            std::cout << "Vertex " << i + 1 << " end" << std::endl;
+        }
+        else if (count == vertex - 1) {
+            std::cout << "Vertex " << i + 1 << " dominant" << std::endl;
+        }
+    }
+}
+
+void whichVertexTypeI(int** matrix, int vertex, int edges) {
+    for (int v = 0; v < vertex; v++) {
+        int count = 0;
+        std::vector<int> massEdgesIndex;
+        for (int e = 0; e < edges; e++) {
+            if (matrix[v][e] == 1) {
+                count++;
+                massEdgesIndex.push_back(e);
+            }
+        }
+        if (count == 0) {
+            std::cout << "Vertex " << v + 1 << " isolated" << std::endl;
+        }
+        else if (count == 1) {
+            std::cout << "Vertex " << v + 1 << " end" << std::endl;
+        }
+        else if (count == vertex) {
+            std::cout << "Vertex " << v + 1 << " dominated" << std::endl;
+        }
+    }
 }
 
 int main() {
 
-  int vertex;
-  std::cout << "Enter amount vertex in matrix: ";
-  std::cin >> vertex;
+    int vertex;
+    std::cout << "Enter amount vertex in matrix: ";
+    std::cin >> vertex;
 
-  int edges;
-  std::cout << "Enter amount edges in matrix: ";
-  std::cin >> edges;
-  
-  int maxEdges = vertex * (vertex - 1) / 2;
-  
-  while (edges > maxEdges) {    
+    int** matrixS = createMatrixS(vertex);
+    
+    printMatrixS(matrixS, vertex);
+    std::cout << "size: " << sizeMatrixS(matrixS, vertex) << std::endl;
+    whichVertexTypeS(matrixS, vertex);
 
-    std::cout << "Enter edges in matrix <= " << maxEdges << " : ";
-    std::cin >> edges;
-  }
+    std::cout << "---" << std::endl;
 
-  int** matrix = createMatrix(matrix, vertex, edges);
-  
-  printMatrix(matrix, vertex, edges); 
-  std::cout << "size: " << sizeMatrix(matrix, vertex, edges) << std::endl;
-  whichVertexType(matrix, vertex, edges);
-  return 0;
+    int edges = sizeMatrixS(matrixS, vertex) / 2;
+    int** matrixI = createMatrixI(matrixS, vertex, edges);
+    
+    printMatrixI(matrixI, vertex, edges);
+    std::cout << "size: " << sizeMatrixI(matrixI, vertex, edges) << std::endl;
+    whichVertexTypeI(matrixI, vertex, edges);
+    return 0;
 }
