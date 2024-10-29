@@ -1,86 +1,119 @@
 #include <iostream>
+#include <vector>
 
-int** createMatrix (int** matrix, int amount) {
-  matrix = (int**)malloc(sizeof(int*) * amount);
-  for (int i = 0; i < amount; i++) {
-    matrix[i] = (int*)malloc(sizeof(int) * amount);
-  }
-  
-  for (int i = 0; i < amount; i++) {
-    for (int j = 0; j < amount; j++) {
-      matrix[i][j] = 0;
-    }
+int** createMatrix (int** matrix, int vertex, int edges) {
+
+  matrix = (int**) malloc(sizeof(int*) * vertex);
+  for (int v = 0; v < vertex; v++) {
+    matrix[v] = (int*) calloc(edges, sizeof(int));
   }
 
   srand(time(NULL));
-  for (int i = 0; i < amount; i++) {
-    for (int j = i + 1; j < amount; j++) {
-      if (i == j) {
-        matrix[i][j] = 0;
-      }
-      else {
-        matrix[i][j] = rand() % 2;
-        matrix[j][i] = matrix[i][j];
-      }
+  for (int e = 0; e < edges; e++) {
+    
+    int v1 = rand() % vertex;
+    int v2 = rand() % vertex;
+    
+    while (v2 == v1) {
+      v2 = rand() % vertex;
     }
+
+    matrix[v1][e] = 1;
+    matrix[v2][e] = 1;
   }
+
 
   return matrix;
 }
 
-void printMatrix(int** matrix, int amount) {
+void printMatrix(int** matrix, int vertex, int edges) {
 
-  for (int i = 0; i < amount; i++) {
-    for (int j = 0; j < amount; j++) {
-      std::cout << matrix[i][j] << " ";
+  for (int v = 0; v < vertex; v++) {
+    for (int e = 0; e < edges; e++) {
+      std::cout << matrix[v][e] << " ";
     }
     std::cout << "\n";
   }
   
 }
 
-int sizeMatrix(int** matrix, int amount) {
+int sizeMatrix(int** matrix, int vertex, int edges) {
 
   int count = 0;
-  for (int i = 0; i < amount; i++) {
-    for (int j = i + 1; j < amount; j++) {
-      if (matrix[i][j] == 1) {
+  for (int v = 0; v < vertex; v++) {
+    for (int e = 0; e < edges; e++) {
+      if (matrix[v][e] == 1) {
         count++;
       }
     }
   }
-  return count;
+  return count / 2;
 }
 
-void whichVertexType(int** matrix, int amount) {
-  for (int i = 0; i < amount; i++) {
+void whichVertexType(int** matrix, int vertex, int edges) {
+  for (int v = 0; v < vertex; v++) {
     int count = 0;
-    for (int j = 0; j < amount; j++) {
-      if (matrix[i][j] == 1) {
+    std::vector<int> massEdgesIndex;
+    for (int e = 0; e < edges; e++) {
+      if (matrix[v][e] == 1) {
         count++;
+        massEdgesIndex.push_back(e);
       }
     }
     if (count == 0) {
-      std::cout << "Vertex " << i+1 << " isolated" << std::endl;
+      std::cout << "Vertex " << v+1 << " isolated" << std::endl;
     }
     else if (count == 1) {
-      std::cout << "Vertex " << i+1 << " end" << std::endl;
+      std::cout << "Vertex " << v+1 << " end" << std::endl;
     }
-    else if (count == amount-1) {
-      std::cout << "Vertex " << i+1 << " dominant" << std::endl;
+    else if (count == vertex - 1) {
+      bool isDominant = true;
+      for (int currentV = 0; currentV < vertex; currentV++) {
+        if (currentV == v) {
+          continue;
+        }
+
+        bool connected = false;
+        for (int eIndex : massEdgesIndex) {
+          if (matrix[currentV][eIndex] == 1) {
+            connected = true;
+            break;
+          }
+        }
+        if (!connected) {
+          isDominant = false;
+          break;
+        }
+      }
+      if (isDominant) {
+        std::cout << "Vertex " << v+1 << " dominant" << std::endl;
+      }
     }
   }
 }
 
 int main() {
 
-  int amount;
+  int vertex;
   std::cout << "Enter amount vertex in matrix: ";
-  std::cin >> amount;
+  std::cin >> vertex;
 
-  int** matrix = createMatrix(matrix, amount);
-  printMatrix(matrix, amount); 
-  std::cout << "size: " << sizeMatrix(matrix, amount) << std::endl;
-  whichVertexType(matrix, amount);
+  int edges;
+  std::cout << "Enter amount edges in matrix: ";
+  std::cin >> edges;
+  
+  int maxEdges = vertex * (vertex - 1) / 2;
+  
+  while (edges > maxEdges) {    
+
+    std::cout << "Enter edges in matrix <= " << maxEdges << " : ";
+    std::cin >> edges;
+  }
+
+  int** matrix = createMatrix(matrix, vertex, edges);
+  
+  printMatrix(matrix, vertex, edges); 
+  std::cout << "size: " << sizeMatrix(matrix, vertex, edges) << std::endl;
+  whichVertexType(matrix, vertex, edges);
   return 0;
 }
